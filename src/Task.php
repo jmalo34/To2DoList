@@ -25,7 +25,13 @@ class Task
 
     static function getAll()
     {
-        return $_SESSION['list_of_tasks']
+        return $_SESSION['list_of_tasks'];
+    }
+
+    //use superglobal to call the list_of_tasks saved in the cookies from this session, and change it to an empty array 
+    static function deleteAll()
+    {
+        $_SESSION['list_of_tasks'] = array();
     }
 }
  ?>

@@ -3,6 +3,8 @@
     require_once __DIR__."/../src/Task.php";
 
     session_start();
+
+    //if there isn't a list of tasks, or that so-named variable "list_of_tasks" has no value, set it to an (empty, for now) array 
     if (empty($_SESSION['list_of_tasks']))
     {
         $_SESSION['list_of_tasks'] = array();
@@ -12,12 +14,25 @@
 
     $app->get("/", function()
     {
+        //begin with an empty output string
         $output = "";
 
-        //loop through Tasks stored in session and print descriptions
-        foreach (Task::getAll() as $task)
+        //creating the $all_tasks variable -- to be equal to the ouput of the getAll method -- means we only have to be calling the getAll method once because here now we can use the $all_tasks variable to: *1) check if any tasks exist, and then 1a) loop through any tasks, and print their descriptions
+        $all_tasks = Task::getAll();
+
+        //*
+        if (!empty($all_tasks))
         {
-            $output = $output . "<p>" . $task->getDescription() . "</p>";
+            $output = $output . "
+                <h1>To 2 Do List</h1>
+                <p>Here are all your tasks:</p>
+                ";
+
+            //loop through Tasks stored in session and print descriptions
+            foreach ($all_tasks as $task)
+            {
+                $output = $output . "<p>" . $task->getDescription() . "</p>";
+            }
         }
 
         //display form that when submitted, will create a new instance of the Task class. Notice the form method is set to "post".
@@ -28,7 +43,14 @@
 
                 <button type='submit'>Add task</button>
             </form>
-            ";
+        ";
+
+        //button to clear list of Tasks
+        $output .= "
+            <form action='delete_tasks' method='post'>
+                <button type='submit'>clear list</button>
+            </form>
+        ";
 
         return $output;
     });
@@ -47,7 +69,17 @@
             <p>" . $task->getDescription() . "</p>
             <p><a href='/'>View your list of things to do.</a></p>
             ";
-    })
+    });
+
+    $app->post("delete_tasks", function()
+    {
+        Task::deleteAll();
+
+        return "
+            <h1>List Cleared!</h1>
+            <p><a href='/'>Home</a></p>
+        ";
+    });
 
     return $app;
  ?>
