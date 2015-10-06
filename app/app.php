@@ -33,10 +33,14 @@
         return $output;
     });
 
+    //route for URL at '/tasks'
     $app->post("/tasks", function()
     {
+        //since form action was set to POST method, data will be read out of the form by using the superglobal $_POST variable. Here, we instatiate an instance of Task.
         $task = new Task($_POST['description']);
+        //pass(?) THIS instance of Task into the save method from Task class
         $task->save();
+        //return text containing the task description, + also, a link to go see a list of all the tasks (located at home, AKA '/')
         return
             "
             <h1>You created a task!</h1>
