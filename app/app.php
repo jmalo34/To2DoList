@@ -13,7 +13,8 @@
     $app = new Silex\Application();
     $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/../views'));
 
-    $app->get("/", function()
+    //"use ($app)" gives our route access to the app variable
+    $app->get("/", function() use ($app)
     {
         //begin with an empty output string
         $output = "";
@@ -53,7 +54,8 @@
             </form>
         ";
 
-        return $output;
+        //tell $app object to user Twig to render a file called tasks.html.twig. this file will display the list of tasks along with the form to create new task and/or clear list.
+        return $app['twig']->render('tasks.html.twig');
     });
 
     //route for URL at '/tasks'
