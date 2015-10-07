@@ -16,45 +16,7 @@
     //"use ($app)" gives our route access to the app variable
     $app->get("/", function() use ($app)
     {
-        //begin with an empty output string
-        $output = "";
-
-        //creating the $all_tasks variable -- to be equal to the ouput of the getAll method -- means we only have to be calling the getAll method once because here now we can use the $all_tasks variable to: *1) check if any tasks exist, and then 1a) loop through any tasks, and print their descriptions
-        $all_tasks = Task::getAll();
-
-        //*
-        if (!empty($all_tasks))
-        {
-            $output = $output . "
-                <h1>To 2 Do List</h1>
-                <p>Here are all your tasks:</p>
-                ";
-
-            //loop through Tasks stored in session and print descriptions
-            foreach ($all_tasks as $task)
-            {
-                $output = $output . "<p>" . $task->getDescription() . "</p>";
-            }
-        }
-
-        //display form that when submitted, will create a new instance of the Task class. Notice the form method is set to "post".
-        $output = $output . "
-            <form action='/tasks' method='post'>
-                <label for='description'>Task Description</label>
-                <input id='description' name='description' type='text'>
-
-                <button type='submit'>Add task</button>
-            </form>
-        ";
-
-        //button to clear list of Tasks
-        $output .= "
-            <form action='delete_tasks' method='post'>
-                <button type='submit'>clear list</button>
-            </form>
-        ";
-
-        //tell $app object to user Twig to render a file called tasks.html.twig. this file will display the list of tasks along with the form to create new task and/or clear list. return value from getAll method is assigned to a variable named tasks, and is available to use inside the template file. More simply: Passing a variable named 'tasks' into our Twig template ('tasks' holds an array of all our Task objects, as returned by static getAll method)
+        //the only thing this route needs to do is get the data needed for use in our template and pass it in by rendering the template
         return $app['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
     });
 
