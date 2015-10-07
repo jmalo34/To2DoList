@@ -11,6 +11,7 @@
     }
 
     $app = new Silex\Application();
+
     $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/../views'));
 
     //"use ($app)" gives our route access to the app variable
@@ -28,17 +29,14 @@
         //pass(?) THIS instance of Task into the save method from Task class
         $task->save();
         //return text containing the task description, + also, a link to go see a list of all the tasks (located at home, AKA '/')
-        return $app['twig']->render('create_task.html.twig');
+        return $app['twig']->render('create_task.html.twig', array('newtask' => $task));
     });
 
-    $app->post("delete_tasks", function()
+    $app->post("delete_tasks", function() use ($app)
     {
         Task::deleteAll();
 
-        return "
-            <h1>List Cleared!</h1>
-            <p><a href='/'>Home</a></p>
-        ";
+        return $app['twig']->render('delete_tasks.html.twig');
     });
 
     return $app;
