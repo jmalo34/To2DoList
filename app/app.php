@@ -4,13 +4,14 @@
 
     session_start();
 
-    //if there isn't a list of tasks, or that so-named variable "list_of_tasks" has no value, set it to an (empty, for now) array 
+    //if there isn't a list of tasks, or that so-named variable "list_of_tasks" has no value, set it to an (empty, for now) array
     if (empty($_SESSION['list_of_tasks']))
     {
         $_SESSION['list_of_tasks'] = array();
     }
 
     $app = new Silex\Application();
+    $app->register(new Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__.'/../views'));
 
     $app->get("/", function()
     {
