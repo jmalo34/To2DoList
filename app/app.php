@@ -54,8 +54,8 @@
             </form>
         ";
 
-        //tell $app object to user Twig to render a file called tasks.html.twig. this file will display the list of tasks along with the form to create new task and/or clear list.
-        return $app['twig']->render('tasks.html.twig');
+        //tell $app object to user Twig to render a file called tasks.html.twig. this file will display the list of tasks along with the form to create new task and/or clear list. return value from getAll method is assigned to a variable named tasks, and is available to use inside the template file. More simply: Passing a variable named 'tasks' into our Twig template ('tasks' holds an array of all our Task objects, as returned by static getAll method)
+        return $app['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
     });
 
     //route for URL at '/tasks'
